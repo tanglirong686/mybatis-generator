@@ -1,0 +1,15 @@
+server:
+  port: 8088
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/demo?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
+
+generator:
+  outlet-path: "D:/STSWork/mybatis-generator"
+  outlet-author: xxx
+  logic-delete-field: deleted
+  base-package: com.example.code
