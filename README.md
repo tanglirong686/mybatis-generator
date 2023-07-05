@@ -7,3 +7,5 @@ For further reference, please consider the following sections:
 * [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.3.11.RELEASE/maven-plugin/reference/html/)
 * [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.3.11.RELEASE/maven-plugin/reference/html/#build-image)
 
+# mybaits-generator
+# 连接数据库表，自动生成增删改查模板代码
