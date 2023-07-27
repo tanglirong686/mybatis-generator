@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.FileOutConfig;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
@@ -31,23 +32,39 @@ public class GeneratorUtil {
 	 * @return
 	 */
 	@SuppressWarnings("static-access")
-	public static List<TableInfoProperty> getTableNames(List<String> tableNameArray) {
+	public static List<TableInfoProperty> getTableNames(String prefix , List<String> tableNameArray) {
 		List<TableInfoProperty> tables = new ArrayList<>();
 		if (tableNameArray == null || tableNameArray.size() < 1) {
 			return tables;
 		}
 		tableNameArray.stream().forEach(name -> {
-			// 模块名称
-			String moduleName = templateMethod.firstLower(templateMethod.underlineToHump(name));
-			// 类名
-			String className = templateMethod.firstUpper(templateMethod.underlineToHump(name));
-			// 路由
-			String router = "/" + templateMethod.underlineToHump(name.toLowerCase());
-			TableInfoProperty tableInfo = new TableInfoProperty().tableName(name).className(className)
-				.moduleName(moduleName).router(router);
-			tables.add(tableInfo);
+			if(StringUtils.isNotBlank(prefix)){
+				String newName = name.replace(prefix , "");
+				TableInfoProperty tableInfo = getTableInfo(name , newName);
+				tables.add(tableInfo);
+			}else{
+				TableInfoProperty tableInfo = getTableInfo(name , name);
+				tables.add(tableInfo);
+			}
 		});
 		return tables;
+	}
+
+	/**
+	 * 通过表名转换为相关的字段
+	 * @param name
+	 * @return
+	 */
+	private static TableInfoProperty getTableInfo(String tableName ,String name){
+		// 模块名称
+		String moduleName = templateMethod.firstLower(templateMethod.underlineToHump(name));
+		// 类名
+		String className = templateMethod.firstUpper(templateMethod.underlineToHump(name));
+		// 路由
+		String router = "/" + templateMethod.underlineToHump(name.toLowerCase());
+		TableInfoProperty tableInfo = new TableInfoProperty().tableName(tableName).className(className)
+				.moduleName(moduleName).router(router);
+		return tableInfo;
 	}
 
 	/**
@@ -101,8 +118,8 @@ public class GeneratorUtil {
 	public static ModuleProperty getModuleProperty(TableInfoProperty property, String basePackage) {
 		ModuleProperty moduleModel = new ModuleProperty();
 		moduleModel.setEntity(property.getClassName());
-		moduleModel.setMapper("I" + property.getClassName() + "Mapper");
-		moduleModel.setService("I" + property.getClassName() + "Service");
+		moduleModel.setMapper(property.getClassName() + "Mapper");
+		moduleModel.setService(property.getClassName() + "Service");
 		moduleModel.setServiceImpl(property.getClassName() + "ServiceImpl");
 		moduleModel.setController(property.getClassName() + "Controller");
 		moduleModel.setVo(property.getClassName() + "VO");

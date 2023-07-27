@@ -15,6 +15,9 @@ public class GenerateProperty {
 	// 表名
 	private String tableNames;
 
+	// 表名前缀
+	private String prefix;
+
 	// 模块输出包名
 	private String outletPackage;
 

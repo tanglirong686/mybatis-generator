@@ -67,6 +67,8 @@ public class Generator {
 		String outletPackage = generateProperty.getOutletPackage();
 		// 表名
 		String tableNames = generateProperty.getTableNames();
+		// 表名前缀
+		String prefix = generateProperty.getPrefix();
 
 		if (StringUtils.isBlank(projectPath)) {
 			projectPath = System.getProperty("user.dir");
@@ -84,7 +86,7 @@ public class Generator {
 		myTemplateEngine.initProperty(generateProperty);
 		OutletProperty outlet = new OutletProperty().author(author).projectPath(projectPath).basePackage(basePackage);
 		List<String> tableNameArray = Arrays.asList(tableNames.split(","));
-		List<TableInfoProperty> tableProperties = GeneratorUtil.getTableNames(tableNameArray);
+		List<TableInfoProperty> tableProperties = GeneratorUtil.getTableNames(prefix ,tableNameArray);
 		// 遍历，执行生成
 		tableProperties.stream().forEach(prop -> {
 			outletFile(prop, outlet);

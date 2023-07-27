@@ -99,38 +99,7 @@ public class ${entity} implements Serializable {
 </#list>
 <#------------  END 字段循环遍历  ---------->
 
-<#if !entityLombokModel>
-    <#list table.fields as field>
-        <#if field.propertyType == "Boolean">
-            <#assign prefix="Is"/>
-        <#else>
-            <#assign prefix=""/>
-        </#if>
-        
-    public <#if field.propertyType=="LocalDateTime">Date<#else>${field.propertyType}</#if> get${prefix}${field.capitalName}() {
-        return ${field.propertyName};
-    }
-
-        <#if entityBuilderModel>
-    public ${entity} set${prefix}${field.capitalName}(<#if field.propertyType=="LocalDateTime">Date<#else>${field.propertyType}</#if> ${field.propertyName}) {
-        <#else>
-    public void set${prefix}${field.capitalName}(<#if field.propertyType=="LocalDateTime">Date<#else>${field.propertyType}</#if> ${field.propertyName}) {
-        </#if>
-        this.${field.propertyName} = ${field.propertyName};
-        <#if entityBuilderModel>
-        return this;
-        </#if>
-    }
-    </#list>
-</#if>
-
-<#if entityColumnConstant>
-    <#list table.fields as field>
-    public static final String ${field.name?upper_case} = "${field.name}";
-
-    </#list>
-</#if>
-
+<#------------  构造函数生成  ---------->
 	public ${entity}() {
 		super();
 	}

@@ -9,8 +9,6 @@ import ${superServiceImplClassPackage};
 
 <#if crud>
 <#if swagger2>
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 <#if isReadList>
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import ${cfg.moduleModel.modulePackage}.dto.${entity}QueryDTO;
@@ -36,8 +34,7 @@ open class ${table.serviceImplName} : ${superServiceImplClass}<I${table.mapperNa
 public class ${table.serviceImplName} extends ${superServiceImplClass}<I${table.mapperName},${entity}> implements ${table.serviceName}{
 <#if crud>
 <#if swagger2>
-	
-	private static final Logger logger = LoggerFactory.getLogger(${table.serviceImplName}.class);
+
 	<#if isReadList>
 	/**
 	 * @description 分页查询接口
@@ -48,13 +45,8 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<I${table.
 	 */
 	@Override
 	public Page<${entity}> queryList(${entity}QueryDTO param) throws Exception{
-		try {
-			Page<${entity}> page = new Page<>(param.getCurrent(), param.getSize());
-			return baseMapper.queryList(page,param);
-		} catch (Exception e) {
-			logger.error("分页查询异常，错误原因：{}",e.getMessage(),e);
-		}
-		return null;
+		Page<${entity}> page = new Page<>(param.getCurrent(), param.getSize());
+		return baseMapper.queryList(page,param);
 	}
 	</#if>
 	
@@ -68,12 +60,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<I${table.
 	 */
 	@Override
 	public boolean saveOrUpdate${entity}(${entity} <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>entity</#if>) throws Exception{
-		try {
-			return super.saveOrUpdate(<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>entity</#if>);
-		} catch (Exception e) {
-			logger.error("保存异常，错误原因：{}",e.getMessage(),e);
-		}
-		return false;
+		return super.saveOrUpdate(<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>entity</#if>);
 	}
 	</#if>
 </#if>

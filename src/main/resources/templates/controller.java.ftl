@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ${package.Entity}.${entity};
 import ${package.Service}.${table.serviceName};
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 <#if isReadList>
 import ${cfg.moduleModel.modulePackage}.dto.${entity}QueryDTO;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -38,9 +36,9 @@ import ${superControllerClassPackage};
 
  /**
  <#if table.comment!?length gt 0>
- * @description ${table.comment!}数据操作接口请求控制器类
+ * @description ${table.comment!}数据操作接口
  <#else>
- * @description ${entity}对象数据操作接口请求控制器类
+ * @description ${entity}对象数据操作接口
  </#if>
  * @author ${author}
  * @since ${date}
@@ -62,8 +60,7 @@ public class ${table.controllerName} {
 </#if>
 <#if crud>
 <#if swagger2>
-	
-	private static final Logger logger = LoggerFactory.getLogger(${table.controllerName}.class);
+
 	@Autowired
 	private ${table.serviceName} <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Service<#else>${table.entityPath}Service</#if>;
 
@@ -93,13 +90,9 @@ public class ${table.controllerName} {
 	@ApiOperation(value = "保存/更新数据")
 	@PostMapping("/saveOrUpdate")
 	public ResultBean<?> saveOrUpdate(@RequestBody ${entity} <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>entity</#if>) throws Exception{
-		try {
-			boolean rst = <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Service<#else>${table.entityPath}Service</#if>.saveOrUpdate${entity}(<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>entity</#if>);
-			if(rst){
-				return ResultUtil.success();
-			}
-		} catch (Exception e) {
-			logger.error("数据保存更新异常，错误原因：{}",e.getMessage(),e);
+		boolean rst = <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Service<#else>${table.entityPath}Service</#if>.saveOrUpdate${entity}(<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>entity</#if>);
+		if(rst){
+			return ResultUtil.success();
 		}
 		return ResultUtil.error();
 	}
@@ -115,11 +108,7 @@ public class ${table.controllerName} {
 	@ApiImplicitParam(name = "<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Id<#else>primaryId</#if>", value = "主键id",paramType = "path",dataType = "String")
 	@GetMapping("/queryById/{<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Id<#else>primaryId</#if>}")
 	public ResultBean<?> queryById(@PathVariable String <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Id<#else>primaryId</#if>) throws Exception{
-		try {
-			return ResultUtil.success(<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Service<#else>${table.entityPath}Service</#if>.getById(<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Id<#else>primaryId</#if>));
-		} catch (Exception e) {
-			logger.error("通过主键id查询数据异常，错误原因：{}",e.getMessage(),e);
-		}
+		return ResultUtil.success(<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Service<#else>${table.entityPath}Service</#if>.getById(<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Id<#else>primaryId</#if>));
 	}
 </#if>
 <#if isDelete>
@@ -133,13 +122,9 @@ public class ${table.controllerName} {
 	@ApiOperation(value = "通过主键id删除数据")
 	@PostMapping("/deleteById")
 	public ResultBean<?> deleteById(@RequestBody List<String> idList) throws Exception{
-		try {
-			boolean rst = <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Service<#else>${table.entityPath}Service</#if>.removeByIds(idList);
-			if(rst){
-				return ResultUtil.success();
-			}
-		} catch (Exception e) {
-			logger.error("通过主键id删除数据异常，错误原因：{}",e.getMessage(),e);
+		boolean rst = <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Service<#else>${table.entityPath}Service</#if>.removeByIds(idList);
+		if(rst){
+			return ResultUtil.success();
 		}
 		return ResultUtil.error();
 	}
