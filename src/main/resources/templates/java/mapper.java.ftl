@@ -1,6 +1,6 @@
 package ${package.Mapper};
 
-import ${package.Entity}.${entity};
+import ${package.Entity}.${cfg.Model.entity};
 import ${superMapperClassPackage};
 
 <#if crud>
@@ -8,7 +8,7 @@ import ${superMapperClassPackage};
 <#if isReadList>
 import org.apache.ibatis.annotations.Param;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import ${cfg.moduleModel.modulePackage}.dto.${entity}QueryDTO;
+import ${cfg.Model.modulePackage}.dto.${cfg.Model.dto};
 </#if>
 </#if>
 </#if>
@@ -30,10 +30,7 @@ import ${cfg.moduleModel.modulePackage}.dto.${entity}QueryDTO;
  * @author ${author}
  * @since ${date}
  */
-<#if kotlin>
-interface ${table.mapperName} : ${superMapperClass}<${entity}>
-<#else>
-public interface I${table.mapperName} extends ${superMapperClass}<${entity}> {
+public interface ${cfg.Model.mapper} extends ${superMapperClass}<${cfg.Model.entity}> {
 <#if crud>
 <#if swagger2>
 
@@ -43,12 +40,10 @@ public interface I${table.mapperName} extends ${superMapperClass}<${entity}> {
 	 * @param page 分页参数 
 	 * @param param 查询参数
 	 * @return 分页查询数据
-	 * @throws Exception 数据查询操作异常
 	 * @create ${author} ${date}
 	 */
-	Page<${entity}> queryList(Page<${entity}> page ,@Param("et") ${entity}QueryDTO param) throws Exception;
+	Page<${entity}> queryList(Page<${cfg.Model.entity}> page ,@Param("et") ${cfg.Model.dto} param);
 	</#if>
 </#if>
 </#if>
 }
-</#if>

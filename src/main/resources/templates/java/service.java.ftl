@@ -1,13 +1,13 @@
 package ${package.Service};
 
-import ${package.Entity}.${entity};
+import ${package.Entity}.${cfg.Model.entity};
 import ${superServiceClassPackage};
 
 <#if crud>
 <#if swagger2>
 <#if isReadList>
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import ${cfg.moduleModel.modulePackage}.dto.${entity}QueryDTO;
+import ${cfg.Model.modulePackage}.dto.${cfg.Model.dto};
 </#if>
 </#if>
 </#if>
@@ -21,10 +21,7 @@ import ${cfg.moduleModel.modulePackage}.dto.${entity}QueryDTO;
  * @author ${author}
  * @since ${date}
  */
-<#if kotlin>
- interface ${table.serviceName} : ${superServiceClass} <${entity}>
-<#else>
-public interface ${table.serviceName} extends ${superServiceClass} <${entity}>{
+public interface ${cfg.Model.service} extends ${superServiceClass} <${cfg.Model.entity}>{
 <#if crud>
 <#if swagger2>
 	
@@ -36,20 +33,19 @@ public interface ${table.serviceName} extends ${superServiceClass} <${entity}>{
 	 * @throws Exception 数据操作异常
 	 * @create ${author} ${date}
 	 */
-	Page<${entity}> queryList(${entity}QueryDTO param) throws Exception;
+	Page<${cfg.Model.entity}> queryList(${cfg.Model.dto} param) throws Exception;
 	</#if>
 	
 	<#if isCreate>
 	/**
 	 * @description 保存/修改数据接口
-	 * @param <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>entity</#if> 保存数据对象
+	 * @param entity 保存数据对象
 	 * @return Boolean 是否保存成功
 	 * @throws Exception 数据操作异常
 	 * @create ${author} ${date}
 	 */
-	boolean saveOrUpdate${entity}(${entity} <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>entity</#if>) throws Exception;
+	boolean saveOrUpdate${cfg.Model.entity}(${cfg.Model.entity} entity) throws Exception;
 	</#if>
 </#if>
 </#if>
 }
-</#if>

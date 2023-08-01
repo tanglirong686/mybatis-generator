@@ -3,6 +3,8 @@ package com.example.generate;
 import java.util.Arrays;
 import java.util.List;
 
+import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import com.example.property.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,6 @@ import com.baomidou.mybatisplus.generator.config.TemplateConfig;
 import com.baomidou.mybatisplus.generator.config.TemplateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.example.convert.MyTemplateEngine;
-import com.example.property.GenerateProperty;
-import com.example.property.ModuleProperty;
-import com.example.property.OutletProperty;
-import com.example.property.TableInfoProperty;
 import com.example.util.GeneratorUtil;
 
 import io.swagger.annotations.Api;
@@ -62,34 +60,23 @@ public class Generator {
 
 	@PostMapping(value = "generate")
 	@ApiOperation(value = "代码生成")
-	public void generate(@RequestBody GenerateProperty generateProperty) {
+	public void generate(@RequestBody GenerateProperty property) {
 		log.info("==========开始生成代码==========");
-		String outletPackage = generateProperty.getOutletPackage();
-		// 表名
-		String tableNames = generateProperty.getTableNames();
-		// 表名前缀
-		String prefix = generateProperty.getPrefix();
-
-		if (StringUtils.isBlank(projectPath)) {
-			projectPath = System.getProperty("user.dir");
-		}
-		if (StringUtils.isNotBlank(outletPackage)) {
-			basePackage = outletPackage;
-		} else {
-			if (StringUtils.isBlank(basePackage)) {
-				basePackage = "com.example.code";
-			}
-		}
-		if (StringUtils.isBlank(tableNames)) {
+		// 表名为空，本次不生成代码
+		if (StringUtils.isBlank(property.getTableNames())) {
 			return;
 		}
-		myTemplateEngine.initProperty(generateProperty);
-		OutletProperty outlet = new OutletProperty().author(author).projectPath(projectPath).basePackage(basePackage);
-		List<String> tableNameArray = Arrays.asList(tableNames.split(","));
-		List<TableInfoProperty> tableProperties = GeneratorUtil.getTableNames(prefix ,tableNameArray);
+		// 将部分参数直接注入到模板变量中
+		myTemplateEngine.initProperty(property);
+		// 代码输出相关参数
+		OutletProperty outlet = getOutletProperty(property);
+		// 数据库表相关参数
+		List<TableInfoProperty> tableProperties = GeneratorUtil.getTableNames(property);
+		// 前端代码生成参数
+		FrontProperty frontProperty = property.getFrontProperty();
 		// 遍历，执行生成
 		tableProperties.stream().forEach(prop -> {
-			outletFile(prop, outlet);
+			outletFile(prop, outlet , frontProperty);
 		});
 		log.info("==========代码生成结束==========");
 	}
@@ -97,11 +84,11 @@ public class Generator {
 	/**
 	 * 生成代码
 	 */
-	public void outletFile(TableInfoProperty property, OutletProperty outlet) {
+	public void outletFile(TableInfoProperty property, OutletProperty outlet , FrontProperty frontProperty) {
 		// 代码生成器
 		AutoGenerator mpg = new AutoGenerator();
 
-		// 设置
+		// 相关模块输出参数
 		ModuleProperty moduleProperty = GeneratorUtil.getModuleProperty(property, outlet.getBasePackage());
 
 		// 全局配置
@@ -116,14 +103,17 @@ public class Generator {
 		mpg.setPackageInfo(pc);
 
 		// 自定义配置
-		InjectionConfig cfg = GeneratorUtil.getInjectionConfig(moduleProperty, property.getModuleName(),
-			gc.getOutputDir());
+		InjectionProperty injectionProperty = new InjectionProperty();
+		injectionProperty.setModuleName(property.getModuleName());
+		injectionProperty.setOutlet(gc.getOutputDir());
+		injectionProperty.setModuleProperty(moduleProperty);
+		injectionProperty.setFrontProperty(frontProperty);
+		InjectionConfig cfg = GeneratorUtil.getInjectionConfig(injectionProperty);
 		mpg.setCfg(cfg);
 
 		// 配置模板
 		TemplateConfig templateConfig = new TemplateConfig();
-		templateConfig.disable(TemplateType.ENTITY, TemplateType.MAPPER, TemplateType.XML, TemplateType.SERVICE,
-			TemplateType.CONTROLLER);
+		templateConfig.disable(TemplateType.ENTITY, TemplateType.MAPPER, TemplateType.XML, TemplateType.SERVICE,TemplateType.CONTROLLER);
 		mpg.setTemplate(templateConfig);
 
 		// 策略配置
@@ -141,5 +131,26 @@ public class Generator {
 
 		mpg.setTemplateEngine(myTemplateEngine);
 		mpg.execute();
+	}
+
+	/**
+	 * 构建代码输出路径相关参数
+	 * @param property
+	 * @return
+	 */
+	public OutletProperty getOutletProperty(GenerateProperty property){
+		String outletPackage = property.getOutletPackage();
+		if (StringUtils.isBlank(projectPath)) {
+			projectPath = System.getProperty("user.dir");
+		}
+		if (StringUtils.isNotBlank(outletPackage)) {
+			basePackage = outletPackage;
+		} else {
+			if (StringUtils.isBlank(basePackage)) {
+				basePackage = "com.example.code";
+			}
+		}
+		OutletProperty outlet = new OutletProperty().author(author).projectPath(projectPath).basePackage(basePackage);
+		return outlet;
 	}
 }

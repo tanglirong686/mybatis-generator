@@ -13,11 +13,10 @@ public class ModuleProperty {
 	private String serviceImpl;
 	private String controller;
 	private String vo;
-	private String condition;
+	private String dto;
 	private String modulePackage;
-	private String serviceInstance;
-	private String conditionInstance;
 	private String router;
+	private String prefixName;
 
 	public String getEntity() {
 		return entity;
@@ -67,12 +66,12 @@ public class ModuleProperty {
 		this.controller = controller;
 	}
 
-	public String getCondition() {
-		return condition;
+	public String getDto() {
+		return dto;
 	}
 
-	public void setCondition(String condition) {
-		this.condition = condition;
+	public void setDto(String dto) {
+		this.dto = dto;
 	}
 
 	public String getModulePackage() {
@@ -83,27 +82,19 @@ public class ModuleProperty {
 		this.modulePackage = modulePackage;
 	}
 
-	public String getConditionInstance() {
-		return conditionInstance;
-	}
-
-	public void setConditionInstance(String conditionInstance) {
-		this.conditionInstance = conditionInstance;
-	}
-
-	public String getServiceInstance() {
-		return serviceInstance;
-	}
-
-	public void setServiceInstance(String serviceInstance) {
-		this.serviceInstance = serviceInstance;
-	}
-
 	public String getRouter() {
 		return router;
 	}
 
 	public void setRouter(String router) {
 		this.router = router;
+	}
+
+	public String getPrefixName() {
+		return prefixName;
+	}
+
+	public void setPrefixName(String prefixName) {
+		this.prefixName = prefixName;
 	}
 }

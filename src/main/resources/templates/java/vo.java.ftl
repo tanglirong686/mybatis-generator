@@ -1,4 +1,4 @@
-package ${cfg.moduleModel.modulePackage}.vo;
+package ${cfg.Model.modulePackage}.vo;
 
 <#if swagger2>
 import io.swagger.annotations.ApiModel;
@@ -28,7 +28,7 @@ import lombok.Data;
 <#if swagger2>
 @ApiModel("${table.comment!}")
 </#if>
-public class ${cfg.moduleModel.vo} {
+public class ${cfg.Model.vo} {
 <#------------  BEGIN 字段循环遍历  ---------->
 <#list table.fields as field>
 	/**
@@ -38,9 +38,7 @@ public class ${cfg.moduleModel.vo} {
         <#if swagger2>
     @ApiModelProperty(name = "${field.propertyName}",value = "${field.comment}")
         <#else>
-    /**
-     * ${field.comment}
-     */
+    @ApiModelProperty(name = "${field.propertyName}")
         </#if>
     </#if>
     private <#if field.propertyType=="LocalDateTime">Date<#else>${field.propertyType}</#if> ${field.propertyName};

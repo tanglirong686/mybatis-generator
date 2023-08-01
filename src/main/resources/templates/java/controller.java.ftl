@@ -3,11 +3,11 @@ package ${package.Controller};
 import org.springframework.web.bind.annotation.RequestMapping;
 <#if crud>
 <#if swagger2>
-import ${package.Entity}.${entity};
-import ${package.Service}.${table.serviceName};
+import ${package.Entity}.${cfg.Model.entity};
+import ${package.Service}.${cfg.Model.service};
 
 <#if isReadList>
-import ${cfg.moduleModel.modulePackage}.dto.${entity}QueryDTO;
+import ${cfg.Model.modulePackage}.dto.${cfg.Model.dto};
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 </#if>
 import java.util.List;
@@ -48,21 +48,18 @@ import ${superControllerClassPackage};
 <#else>
 @Controller
 </#if>
-@RequestMapping("<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>")
+@RequestMapping("${cfg.Model.router}")
 @Api(tags = "${table.comment!}操作接口")
-<#if kotlin>
-class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
-<#else>
 <#if superControllerClass??>
-public class ${table.controllerName} extends ${superControllerClass} {
+public class ${cfg.Model.controller} extends ${superControllerClass} {
 <#else>
-public class ${table.controllerName} {
+public class ${cfg.Model.controller} {
 </#if>
 <#if crud>
 <#if swagger2>
 
 	@Autowired
-	private ${table.serviceName} <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Service<#else>${table.entityPath}Service</#if>;
+	private ${cfg.Model.service} ${cfg.Model.prefixName}Service;
 
 <#if isReadList>
 	/**
@@ -74,23 +71,23 @@ public class ${table.controllerName} {
 	 */
 	@ApiOperation(value = "分页查询数据")
 	@PostMapping("/queryList")
-	public ResultBean<?> queryList(@RequestBody ${entity}QueryDTO param) throws Exception{
-		Page<${entity}> rstList = <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Service<#else>${table.entityPath}Service</#if>.queryList(param);
+	public ResultBean<?> queryList(@RequestBody ${cfg.Model.dto} param) throws Exception{
+		Page<${cfg.Model.entity}> rstList = ${cfg.Model.prefixName}Service.queryList(param);
 		return ResultUtil.success(rstList);
 	}
 </#if>
 <#if isCreate>
 	/**
 	 * @description 保存/更新数据
-	 * @param <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>entity</#if> 保存对象数据
+	 * @param ${cfg.Model.prefixName} 保存对象数据
 	 * @return 是否保存成功
 	 * @throws Exception 数据操作异常
 	 * @create ${author} ${date}
 	 */
 	@ApiOperation(value = "保存/更新数据")
 	@PostMapping("/saveOrUpdate")
-	public ResultBean<?> saveOrUpdate(@RequestBody ${entity} <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>entity</#if>) throws Exception{
-		boolean rst = <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Service<#else>${table.entityPath}Service</#if>.saveOrUpdate${entity}(<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>entity</#if>);
+	public ResultBean<?> saveOrUpdate(@RequestBody ${cfg.Model.entity} ${cfg.Model.prefixName}) throws Exception{
+		boolean rst = ${cfg.Model.prefixName}Service.saveOrUpdate${cfg.Model.entity}(${cfg.Model.prefixName});
 		if(rst){
 			return ResultUtil.success();
 		}
@@ -100,29 +97,28 @@ public class ${table.controllerName} {
 <#if isRead>
 	/**
 	 * @description 通过主键id查询数据
-	 * @param <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Id<#else>primaryId</#if> 主键id
+	 * @param primaryId 主键id
 	 * @throws Exception 数据操作异常
 	 * @create ${author} ${date}
 	 */
 	@ApiOperation(value = "通过主键id查询数据")
-	@ApiImplicitParam(name = "<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Id<#else>primaryId</#if>", value = "主键id",paramType = "path",dataType = "String")
-	@GetMapping("/queryById/{<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Id<#else>primaryId</#if>}")
-	public ResultBean<?> queryById(@PathVariable String <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Id<#else>primaryId</#if>) throws Exception{
-		return ResultUtil.success(<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Service<#else>${table.entityPath}Service</#if>.getById(<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Id<#else>primaryId</#if>));
+	@GetMapping("/queryById")
+	public ResultBean<?> queryById(@RequestParam(value="${cfg.Model.prefixName}Id") String primaryId) throws Exception{
+		return ResultUtil.success(${cfg.Model.prefixName}Service.getById(primaryId));
 	}
 </#if>
 <#if isDelete>
 	/**
 	 * @description 通过主键id删除数据
-	 * @param idList 主键id数组
+	 * @param list 主键id数组
 	 * @return 是否删除成功
 	 * @throws Exception 数据操作异常
 	 * @create ${author} ${date}
 	 */
 	@ApiOperation(value = "通过主键id删除数据")
 	@PostMapping("/deleteById")
-	public ResultBean<?> deleteById(@RequestBody List<String> idList) throws Exception{
-		boolean rst = <#if controllerMappingHyphenStyle??>${controllerMappingHyphen}Service<#else>${table.entityPath}Service</#if>.removeByIds(idList);
+	public ResultBean<?> deleteById(@RequestBody List<String> list) throws Exception{
+		boolean rst = ${cfg.Model.prefixName}Service.removeByIds(idList);
 		if(rst){
 			return ResultUtil.success();
 		}
@@ -132,4 +128,3 @@ public class ${table.controllerName} {
 </#if>
 </#if>
 }
-</#if>
