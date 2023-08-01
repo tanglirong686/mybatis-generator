@@ -1,4 +1,4 @@
-package com.example.convert;
+package com.example.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.generator.config.po.TableField;
  * @Author
  * @Date 2020/11/17
  */
-public class TemplateMethod {
+public class ConvertUtil {
 
 	// 下划线的匹配规则定义
 	private static Pattern UNDER_LINE_PATTERN = Pattern.compile("_(\\w)");
@@ -68,16 +68,16 @@ public class TemplateMethod {
 	 * @param tableName
 	 * @return
 	 */
-	public String className(String tableName) {
+	public static String className(String tableName) {
 		if (StringUtils.isBlank(tableName)) {
 			return "";
 		}
 		String str = tableName.toLowerCase();
-		String[] strs = str.split("_");
+		String[] strArr = str.split("_");
 		String result = "";
-		if (strs.length > 1) {
-			for (int i = 1; i < strs.length; i++) {
-				result += firstUpper(strs[i]);
+		if (strArr.length > 1) {
+			for (int i = 1; i < strArr.length; i++) {
+				result += firstUpper(strArr[i]);
 			}
 		} else {
 			result = "表命名不规范";
@@ -92,14 +92,14 @@ public class TemplateMethod {
 	 * @param columnName
 	 * @return
 	 */
-	public String propertyName(String columnName) {
+	public static String propertyName(String columnName) {
 		if (StringUtils.isBlank(columnName)) {
 			return "";
 		}
 		return firstLower(columnName);
 	}
 
-	public String propertyValidAnnotation(TableField field) {
+	public static String propertyValidAnnotation(TableField field) {
 		if (field.getType().startsWith("varchar")) {
 			String len = field.getType().replace("varchar(", "").replace(")", "").trim();
 			return "@Size(max = " + len + ")";
@@ -113,7 +113,7 @@ public class TemplateMethod {
 	 * @param str 输入字符
 	 * @return
 	 */
-	public String firstUpper(String str) {
+	public static String firstUpper(String str) {
 		String result = "";
 		if (StringUtils.isNotBlank(str)) {
 			result += str.substring(0, 1).toUpperCase();
@@ -130,7 +130,7 @@ public class TemplateMethod {
 	 * @param str 输入字符
 	 * @return
 	 */
-	public String firstLower(String str) {
+	public static String firstLower(String str) {
 		String result = "";
 		if (StringUtils.isNotBlank(str)) {
 			result += str.substring(0, 1).toLowerCase();

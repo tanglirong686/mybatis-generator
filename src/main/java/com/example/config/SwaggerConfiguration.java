@@ -37,6 +37,6 @@ public class SwaggerConfiguration {
 	 * @return
 	 */
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("代码生成").description("相关接口文档").version("0.0.1").build();
+		return new ApiInfoBuilder().title("代码生成").description("接口文档").version("1.0.1").build();
 	}
 }

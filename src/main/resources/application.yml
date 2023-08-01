@@ -9,7 +9,7 @@ spring:
     password: root
 
 generator:
-  outlet-path: "D:/STSWork/mybatis-generator"
-  outlet-author: xxx
+  outlet-path: "I:/temp"
+  outlet-author: sha diao kun
   logic-delete-field: deleted
-  base-package: com.example.code
+  base-package: com.project.basic

@@ -1,4 +1,4 @@
-package ${cfg.moduleModel.modulePackage}.dto;
+package ${cfg.Model.modulePackage}.dto;
 
 <#if swagger2>
 import io.swagger.annotations.ApiModel;
@@ -26,7 +26,7 @@ import lombok.Data;
 <#if swagger2>
 @ApiModel("${table.comment!}")
 </#if>
-public class ${cfg.moduleModel.condition} {
+public class ${cfg.Model.dto} {
 <#------------  BEGIN 字段循环遍历  ---------->
 <#list table.fields as field>
 	/**
