@@ -214,7 +214,7 @@ public class GeneratorUtil {
 	 */
 	public static Set<String> getInclude(FrontProperty property){
 		Set<String> include = new HashSet<>();
-		if(property.getType().equals(CommonEnum.FrontType.REACT.getValue())){
+		if(property.getType().equals(CommonEnum.FrontType.REACT)){
 			if(property.isSimple()){
 				include.add(CommonEnum.ReactPage.INDEX.getValue());
 				include.add(CommonEnum.ReactPage.ADD_FORM.getValue());

@@ -10,8 +10,8 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "前端代码生成参数")
 public class FrontProperty {
     // 前端使用的模板类型（React or Vue or ...）
-    @ApiModelProperty(name = "type",value = "前端使用的模板类型，默认react ，该配置项控制前端使用哪种模板")
-    private String type = CommonEnum.FrontType.REACT.getValue();
+    @ApiModelProperty(name = "type",value = "前端使用的模板类型，默认REACT ，该配置项控制前端使用哪种模板")
+    private CommonEnum.FrontType type = CommonEnum.FrontType.REACT;
 
     // 简单单表的增删改查
     @ApiModelProperty(name = "simple",value = "默认true ，该配置控制使用模板生成简单的单表增删改查功能")
@@ -28,18 +28,18 @@ public class FrontProperty {
     public FrontProperty() {
     }
 
-    public FrontProperty(String type, boolean simple, boolean simpleTree, boolean complexTree) {
+    public FrontProperty(CommonEnum.FrontType type, boolean simple, boolean simpleTree, boolean complexTree) {
         this.type = type;
         this.simple = simple;
         this.simpleTree = simpleTree;
         this.complexTree = complexTree;
     }
 
-    public String getType() {
+    public CommonEnum.FrontType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(CommonEnum.FrontType type) {
         this.type = type;
     }
 

@@ -42,6 +42,9 @@ public class CommonEnum {
         }
     }
 
+    /**
+     * api 相关模板文件
+     */
     public enum ApiPage{
         API("api.js.ftl"),
         ACTION("action.js.ftl"),
