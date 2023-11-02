@@ -6,8 +6,11 @@ import cn.smallbun.screw.core.engine.EngineFileType;
 import cn.smallbun.screw.core.engine.EngineTemplateType;
 import cn.smallbun.screw.core.execute.DocumentationExecute;
 import cn.smallbun.screw.core.process.ProcessConfig;
+import com.example.config.HikariConfiguration;
+import com.example.property.DocGeneProperty;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -18,37 +21,27 @@ import java.util.ArrayList;
  */
 public class DocumentUtil {
 
-    // 文档输出路径
-    private static final String DOC_OUTPUT = "I:/temp/word/";
-    // 导出文件名
-    private static final String FILE_NAME = "数据库设计文档";
     /**
      * 文档生成
      */
-    public static void generateWord() {
+    public static void generateWord(DocGeneProperty property) {
         //数据源
-        HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        hikariConfig.setJdbcUrl("jdbc:mysql://47.97.37.247:33065/engineering_management");
-        hikariConfig.setUsername("root");
-        hikariConfig.setPassword("yangyi126");
-        //设置可以获取tables remarks信息
-        hikariConfig.addDataSourceProperty("useInformationSchema", "true");
-        hikariConfig.setMinimumIdle(2);
-        hikariConfig.setMaximumPoolSize(5);
+        HikariConfig hikariConfig = property.getHikariConfig();
         DataSource dataSource = new HikariDataSource(hikariConfig);
         //生成配置
         EngineConfig engineConfig = EngineConfig.builder()
                 //生成文件路径
-                .fileOutputDir(DOC_OUTPUT)
+                .fileOutputDir(property.getOutlet())
                 //打开目录
                 .openOutputDir(true)
                 //文件类型
-                .fileType(EngineFileType.HTML)
+                .fileType(EngineFileType.WORD)
                 //生成模板实现
                 .produceType(EngineTemplateType.freemarker)
+                // 自定义模板路径
+                .customTemplate(property.getTempPath())
                 //自定义文件名称
-                .fileName(FILE_NAME).build();
+                .fileName(property.getFileName()).build();
 
         //忽略表
         ArrayList<String> ignoreTableName = new ArrayList<>();

@@ -10,6 +10,7 @@ spring:
 
 generator:
   outlet-path: "I:/temp"
-  outlet-author: sha diao kun
+  outlet-author: tang lirong
   logic-delete-field: deleted
   base-package: com.project.basic
+  doc-path: "I:/temp/word/"

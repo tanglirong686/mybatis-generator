@@ -118,7 +118,7 @@ public class ${cfg.Model.controller} {
 	@ApiOperation(value = "通过主键id删除数据")
 	@PostMapping("/deleteById")
 	public ResultBean<?> deleteById(@RequestBody List<String> list) throws Exception{
-		boolean rst = ${cfg.Model.prefixName}Service.removeByIds(idList);
+		boolean rst = ${cfg.Model.prefixName}Service.removeByIds(list);
 		if(rst){
 			return ResultUtil.success();
 		}

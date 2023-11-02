@@ -40,7 +40,7 @@ public class ${cfg.Model.serviceImpl} extends ${superServiceImplClass}<${cfg.Mod
 	 */
 	@Override
 	public Page<${entity}> queryList(${cfg.Model.dto} param) throws Exception{
-		Page<${cfg.Model.entity}> page = new Page<>(param.getCurrent(), param.getSize());
+		Page<${cfg.Model.entity}> page = new Page<>(param.getCurrent(), param.getPageSize());
 		return baseMapper.queryList(page,param);
 	}
 	</#if>
